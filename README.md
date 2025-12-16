@@ -42,13 +42,14 @@ This project helps users understand their mental well-being and provides actiona
 - FastAPI  
 - Flask 
 
-### 🔹 Machine Learning / AI
+### 🔹 Deep Learning / AI
 - PyTorch (model training & inference)  
 - Transformers (text-based mental health prediction)  
 - CNN Models (emotion detection from images)  
 
 
 ---
+
 
 
 
