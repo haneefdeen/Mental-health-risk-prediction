@@ -47,10 +47,9 @@ This project helps users understand their mental well-being and provides actiona
 - Transformers (text-based mental health prediction)  
 - CNN Models (emotion detection from images)  
 
-### 🔹 Database
-- MongoDB  
 
 ---
+
 
 
 
