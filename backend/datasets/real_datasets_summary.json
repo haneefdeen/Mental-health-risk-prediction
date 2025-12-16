@@ -1,0 +1,228 @@
+{
+  "fer2013": {
+    "name": "FER2013",
+    "description": "Facial Emotion Recognition Dataset",
+    "emotions": [
+      "angry",
+      "disgusted",
+      "fearful",
+      "happy",
+      "neutral",
+      "sad",
+      "surprised"
+    ],
+    "train_images": {
+      "angry": 3995,
+      "disgusted": 436,
+      "fearful": 4097,
+      "happy": 7215,
+      "neutral": 4965,
+      "sad": 4830,
+      "surprised": 3171
+    },
+    "test_images": {
+      "angry": 958,
+      "disgusted": 111,
+      "fearful": 1024,
+      "happy": 1774,
+      "neutral": 1233,
+      "sad": 1247,
+      "surprised": 831
+    },
+    "total_images": 35887
+  },
+  "daic_woz": {
+    "name": "DAIC-WOZ",
+    "description": "Depression Analysis Dataset",
+    "total_transcripts": 189,
+    "sample_transcript": {
+      "file": "300_TRANSCRIPT.csv",
+      "total_lines": 174,
+      "speakers": [
+        "Ellie",
+        "Participant"
+      ],
+      "duration": "621.27 seconds"
+    }
+  },
+  "reddit_stress": {
+    "name": "Reddit Stress/Anxiety",
+    "description": "Reddit posts with stress/anxiety labels",
+    "total_posts": 3999,
+    "stress_distribution": {
+      "1": 3999
+    },
+    "sample_posts": [
+      {
+        "Text": "advice please  hey everyone please help me im so convinced i have a brain tumor okay so a week ago i noticed this head pressure mainly when i get up bend down its like a squeezing for a few secondsand then i get headaches on my right side does that mean that mean theres a tumor there  if it was big enough to be causing headaches on one side wouldnt there be more symptoms the headache is mostly when i get up to do things and head just feels weird when i stand up like weird lightheaded fuzzy pressure  and idk it feels tight by my nose please reassure me this isnt a brain tumor im making a appointment tomorrow and if its to far im just gonna go to the er but im terrified to sleep because im like what if i die in my sleep how would i know if its a brain tumor  im only 21 i have bad anxiety this is so scary ",
+        "is_stressed/anxious": 1
+      },
+      {
+        "Text": "does anyone get anxious about something and then forget what you were anxious about then get more anxious trying to remember  just what the title says i feel like this is really unecessary but hard to shake that feeling that i\u2019m forgetting something important anyone else get this ",
+        "is_stressed/anxious": 1
+      },
+      {
+        "Text": "ocd is overwhelming me ocd is overwhelming me \n\ni find it impossible to relax in any environment and its incredibly distressing my mind constantly generates countless predictions per minute about potential events leaving me unable to feel at ease even in my own home the fear is overwhelming\u2014i cant sit quietly or close my eyes without imagining all sorts of scenarios what if the microwave beeps the lights go out a siren blares or the tv switches on the anticipation and dread of these possibilities whether they happen or not are consuming me does anyone have any advice or suggestions on what i should do it feels like its only a matter of time before one of these fears becomes reality and that thought is really starting to get to me\n\nseriously its not an exaggeration\u2014i likely make 7080 predictions every 5 minutes obsessing over the most obscure and random events in my surroundings as potential signs im at a loss for how to quiet this mental chatter or put a stop to it its driving me absolutely insane",
+        "is_stressed/anxious": 1
+      }
+    ]
+  },
+  "dreaddit": {
+    "name": "Dreaddit",
+    "description": "Reddit posts with comprehensive linguistic features",
+    "total_posts": 715,
+    "stress_distribution": {
+      "1": 369,
+      "0": 346
+    },
+    "subreddits": {
+      "anxiety": 147,
+      "relationships": 142,
+      "ptsd": 127,
+      "domesticviolence": 72,
+      "survivorsofabuse": 70,
+      "assistance": 66,
+      "homeless": 52,
+      "almosthomeless": 19,
+      "stress": 14,
+      "food_pantry": 6
+    },
+    "features": [
+      "id",
+      "subreddit",
+      "post_id",
+      "sentence_range",
+      "text",
+      "label",
+      "confidence",
+      "social_timestamp",
+      "social_karma",
+      "syntax_ari",
+      "lex_liwc_WC",
+      "lex_liwc_Analytic",
+      "lex_liwc_Clout",
+      "lex_liwc_Authentic",
+      "lex_liwc_Tone",
+      "lex_liwc_WPS",
+      "lex_liwc_Sixltr",
+      "lex_liwc_Dic",
+      "lex_liwc_function",
+      "lex_liwc_pronoun",
+      "lex_liwc_ppron",
+      "lex_liwc_i",
+      "lex_liwc_we",
+      "lex_liwc_you",
+      "lex_liwc_shehe",
+      "lex_liwc_they",
+      "lex_liwc_ipron",
+      "lex_liwc_article",
+      "lex_liwc_prep",
+      "lex_liwc_auxverb",
+      "lex_liwc_adverb",
+      "lex_liwc_conj",
+      "lex_liwc_negate",
+      "lex_liwc_verb",
+      "lex_liwc_adj",
+      "lex_liwc_compare",
+      "lex_liwc_interrog",
+      "lex_liwc_number",
+      "lex_liwc_quant",
+      "lex_liwc_affect",
+      "lex_liwc_posemo",
+      "lex_liwc_negemo",
+      "lex_liwc_anx",
+      "lex_liwc_anger",
+      "lex_liwc_sad",
+      "lex_liwc_social",
+      "lex_liwc_family",
+      "lex_liwc_friend",
+      "lex_liwc_female",
+      "lex_liwc_male",
+      "lex_liwc_cogproc",
+      "lex_liwc_insight",
+      "lex_liwc_cause",
+      "lex_liwc_discrep",
+      "lex_liwc_tentat",
+      "lex_liwc_certain",
+      "lex_liwc_differ",
+      "lex_liwc_percept",
+      "lex_liwc_see",
+      "lex_liwc_hear",
+      "lex_liwc_feel",
+      "lex_liwc_bio",
+      "lex_liwc_body",
+      "lex_liwc_health",
+      "lex_liwc_sexual",
+      "lex_liwc_ingest",
+      "lex_liwc_drives",
+      "lex_liwc_affiliation",
+      "lex_liwc_achieve",
+      "lex_liwc_power",
+      "lex_liwc_reward",
+      "lex_liwc_risk",
+      "lex_liwc_focuspast",
+      "lex_liwc_focuspresent",
+      "lex_liwc_focusfuture",
+      "lex_liwc_relativ",
+      "lex_liwc_motion",
+      "lex_liwc_space",
+      "lex_liwc_time",
+      "lex_liwc_work",
+      "lex_liwc_leisure",
+      "lex_liwc_home",
+      "lex_liwc_money",
+      "lex_liwc_relig",
+      "lex_liwc_death",
+      "lex_liwc_informal",
+      "lex_liwc_swear",
+      "lex_liwc_netspeak",
+      "lex_liwc_assent",
+      "lex_liwc_nonflu",
+      "lex_liwc_filler",
+      "lex_liwc_AllPunc",
+      "lex_liwc_Period",
+      "lex_liwc_Comma",
+      "lex_liwc_Colon",
+      "lex_liwc_SemiC",
+      "lex_liwc_QMark",
+      "lex_liwc_Exclam",
+      "lex_liwc_Dash",
+      "lex_liwc_Quote",
+      "lex_liwc_Apostro",
+      "lex_liwc_Parenth",
+      "lex_liwc_OtherP",
+      "lex_dal_max_pleasantness",
+      "lex_dal_max_activation",
+      "lex_dal_max_imagery",
+      "lex_dal_min_pleasantness",
+      "lex_dal_min_activation",
+      "lex_dal_min_imagery",
+      "lex_dal_avg_activation",
+      "lex_dal_avg_imagery",
+      "lex_dal_avg_pleasantness",
+      "social_upvote_ratio",
+      "social_num_comments",
+      "syntax_fk_grade",
+      "sentiment"
+    ],
+    "sample_posts": [
+      {
+        "text": "Its like that, if you want or not.\u201c ME: I have no problem, if it takes longer. But you asked my friend for help and let him wait for one hour and then you haven\u2019t prepared anything. Thats not what you asked for. Instead of 3 hours, he helped you for 10 hours till 5am...",
+        "label": 0,
+        "subreddit": "relationships"
+      },
+      {
+        "text": "I man the front desk and my title is HR Customer Service Representative. About 50% of my job is spent onboarding new hires. Maybe 10% is clerical/paperwork. The rest is dealing with people who walk in and need help with benefits, retirement, etc. Although I am required to know the basics of our benefits plans and how the retirement and pension benefits work, many employees have questions beyond my knowledge base.",
+        "label": 0,
+        "subreddit": "anxiety"
+      },
+      {
+        "text": "We'd be saving so much money with this new housr...its such an expensive city.... I did some googling in their language and found that it was illegal for them to do that. I was excited like oh ok if it happens ill call the police on them....  but now i did some further googling and turns out that if you sign the contract with that in it than everything is on their side... The contract is long term so we'd have to give 6months notice before leaving even if we give it next week ill still have to live six months with this.... i wanna die i swear i havent been so helpless and scared in so long.... Also two days ago my friend mentioned he ran into my ex who ruined my life and that he told him he wants to see mw and get closure.",
+        "label": 1,
+        "subreddit": "ptsd"
+      }
+    ]
+  },
+  "total_datasets": 4,
+  "last_updated": "2025-10-22T23:41:43.021926"
+}

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - MindScope AI</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/admin.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Admin Header -->
+    <nav class="navbar navbar-dark bg-admin-primary fixed-top shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-shield-check me-2"></i>MindScope Admin Panel
+            </a>
+            <div class="d-flex align-items-center">
+                <a href="/" class="btn btn-outline-light btn-sm me-2">
+                    <i class="bi bi-house me-1"></i>User View
+                </a>
+                <button class="btn btn-outline-light btn-sm me-2" onclick="toggleTheme()">
+                    <i class="bi bi-sun" id="theme-icon"></i>
+                </button>
+                <div class="dropdown">
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle me-1"></i><span id="admin-name">Admin</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" onclick="logout()">
+                            <i class="bi bi-box-arrow-right me-1"></i>Logout
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid admin-container">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 sidebar bg-admin-sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" onclick="showAdminSection('dashboard', event); return false;">
+                                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showAdminSection('users', event); return false;">
+                                <i class="bi bi-people me-2"></i>Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showAdminSection('analyses', event); return false;">
+                                <i class="bi bi-graph-up me-2"></i>Analyses
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showAdminSection('models', event); return false;">
+                                <i class="bi bi-cpu me-2"></i>Model Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showAdminSection('notifications', event); return false;">
+                                <i class="bi bi-bell me-2"></i>Notifications
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showAdminSection('resources', event); return false;">
+                                <i class="bi bi-folder me-2"></i>Resources
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showAdminSection('settings', event); return false;">
+                                <i class="bi bi-gear me-2"></i>Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showAdminSection('logs', event); return false;">
+                                <i class="bi bi-journal-text me-2"></i>Logs
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="pt-3">
+                    <!-- Dashboard Section -->
+                    <div id="admin-dashboard" class="admin-section">
+                        <div class="section-header">
+                            <div>
+                                <h2><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
+                                <p class="text-muted mb-0">Overview of user analytics and system statistics</p>
+                            </div>
+                            <button class="btn btn-outline-light" onclick="refreshDashboard()">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                            </button>
+                        </div>
+                        
+                        <!-- Stats Cards -->
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-gradient-primary text-white stats-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="card-title mb-2">Total Users</h6>
+                                                <h2 id="stat-total-users">0</h2>
+                                            </div>
+                                            <i class="bi bi-people-fill fs-1 opacity-50"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-gradient-success text-white stats-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="card-title mb-2">Total Analyses</h6>
+                                                <h2 id="stat-total-analyses">0</h2>
+                                            </div>
+                                            <i class="bi bi-graph-up fs-1 opacity-50"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-gradient-warning text-white stats-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="card-title mb-2">High-Risk Users</h6>
+                                                <h2 id="stat-high-risk">0</h2>
+                                            </div>
+                                            <i class="bi bi-exclamation-triangle-fill fs-1 opacity-50"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Charts -->
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-pie-chart me-2"></i>Emotion Distribution
+                                        </h5>
+                                        <small class="text-muted">Last 7 days of user analyses</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="emotionChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-bar-chart me-2"></i>Login Activity
+                                        </h5>
+                                        <small class="text-muted">Daily user logins for the past week</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="loginChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-activity me-2"></i>Stress Distribution
+                                        </h5>
+                                        <small class="text-muted">Stress levels across all user analyses</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="stressChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Recent Analyses -->
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-clock-history me-2"></i>Recent User Analyses
+                                        </h5>
+                                        <small class="text-muted">Latest analysis records from users</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Time</th>
+                                                        <th>Emotion</th>
+                                                        <th>Stress Level</th>
+                                                        <th>Risk Level</th>
+                                                        <th>Mode</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="recent-analyses-table-body">
+                                                    <tr><td colspan="5" class="text-center text-muted py-4">Loading recent analyses...</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Section -->
+                    <div id="admin-users" class="admin-section" style="display: none;">
+                        <div class="section-header">
+                            <div>
+                                <h2><i class="bi bi-people me-2"></i>Users</h2>
+                                <p class="text-muted mb-0">Manage and monitor all registered users</p>
+                            </div>
+                            <button class="btn btn-outline-light" onclick="loadUsers()">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                            </button>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <h5 class="card-title mb-0">User List</h5>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                            <input type="text" class="form-control" id="user-search" placeholder="Search by email or name..." onkeyup="filterUsers()">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Name / ID</th>
+                                                <th>Email</th>
+                                                <th>Status</th>
+                                                <th>Risk Alert</th>
+                                                <th>Last Login</th>
+                                                <th>Analyses</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="users-table-body">
+                                            <tr><td colspan="7" class="text-center py-5"><span class="text-muted" style="font-size: 1.1rem; font-weight: 500;">Loading users...</span></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analyses Section -->
+                    <div id="admin-analyses" class="admin-section" style="display: none;">
+                        <div class="section-header">
+                            <div>
+                                <h2><i class="bi bi-graph-up me-2"></i>User Analyses</h2>
+                                <p class="text-muted mb-0">View and manage all user analysis records</p>
+                            </div>
+                            <button class="btn btn-outline-light" onclick="refreshAnalyses()">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                            </button>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Analysis Records</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>User ID</th>
+                                                <th>Timestamp</th>
+                                                <th>Emotion</th>
+                                                <th>Stress Level</th>
+                                                <th>Risk Level</th>
+                                                <th>Mode</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="analyses-table-body">
+                                            <tr><td colspan="7" class="text-center py-5"><span class="text-muted" style="font-size: 1.1rem; font-weight: 500;">Loading analyses...</span></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="mt-3 d-flex justify-content-between align-items-center">
+                                    <small class="text-muted" id="analyses-count">Loading...</small>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-light me-2" id="load-more-btn" onclick="loadMoreAnalyses()" style="display: none;">
+                                            <i class="bi bi-arrow-down-circle me-1"></i>Load More
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-light" onclick="refreshAnalyses()">
+                                            <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Model Management Section -->
+                    <div id="admin-models" class="admin-section" style="display: none;">
+                        <div class="section-header">
+                            <div>
+                                <h2><i class="bi bi-cpu me-2"></i>Model Management</h2>
+                                <p class="text-muted mb-0">Monitor model versions and training metrics</p>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-info-circle me-2"></i>Model Version Information
+                                        </h5>
+                                        <small class="text-muted">Current model version and training details</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="model-version-info">
+                                            <p class="text-muted" style="font-size: 1.1rem; font-weight: 500;">Loading model version information...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-graph-up me-2"></i>Model Metrics
+                                        </h5>
+                                        <small class="text-muted">Performance metrics and accuracy scores</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="model-metrics-content">
+                                            <p class="text-muted" style="font-size: 1.1rem; font-weight: 500;">Loading model metrics...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-play-circle me-2"></i>Training Actions
+                                        </h5>
+                                        <small class="text-muted">Retrain models with updated data</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <button class="btn btn-primary w-100 mb-2" onclick="trainModel('text')">
+                                            <i class="bi bi-play-fill me-2"></i>Train Text Model
+                                        </button>
+                                        <button class="btn btn-primary w-100 mb-2" onclick="trainModel('image')">
+                                            <i class="bi bi-play-fill me-2"></i>Train Image Model
+                                        </button>
+                                        <button class="btn btn-primary w-100 mb-2" onclick="trainModel('fusion')">
+                                            <i class="bi bi-play-fill me-2"></i>Train Fusion Model
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Section -->
+                    <div id="admin-notifications" class="admin-section" style="display: none;">
+                        <h2 class="mb-4"><i class="bi bi-bell me-2"></i>Notifications</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card bg-admin-card mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Send Wellness Broadcast</h5>
+                                        <form id="broadcast-form">
+                                            <div class="mb-3">
+                                                <label class="form-label">Title</label>
+                                                <input type="text" class="form-control" id="broadcast-title" placeholder="Wellness tip of the day" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Message</label>
+                                                <textarea class="form-control" id="broadcast-body" rows="4" placeholder="Take a short break and drink some water 🌿" required></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-admin-primary w-100">
+                                                <i class="bi bi-broadcast me-2"></i>Send to All Users
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-envelope me-2"></i>Send Message (Individual)
+                                        </h5>
+                                        <small class="text-muted">Send a message to a specific user</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="message-form">
+                                            <div class="mb-3">
+                                                <label class="form-label" style="font-weight: 700; font-size: 1rem;">Select User</label>
+                                                <select class="form-select" id="message-user-id" required style="font-size: 1rem; font-weight: 500;">
+                                                    <option value="">-- Choose a user --</option>
+                                                </select>
+                                                <small class="text-muted">Select the user you want to send a message to</small>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" style="font-weight: 700; font-size: 1rem;">Title</label>
+                                                <input type="text" class="form-control" id="message-title" placeholder="Message title" required style="font-size: 1rem;">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" style="font-weight: 700; font-size: 1rem;">Message</label>
+                                                <textarea class="form-control" id="message-body" rows="4" placeholder="Enter your message here..." required style="font-size: 1rem;"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary w-100">
+                                                <i class="bi bi-send me-2"></i>Send Message
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-clock-history me-2"></i>Message History
+                                        </h5>
+                                        <small class="text-muted">Recent messages you've sent</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="message-history-list" style="max-height: 400px; overflow-y: auto;">
+                                            <p class="text-center py-5"><span class="text-muted" style="font-size: 1.1rem; font-weight: 500;">Loading message history...</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resources Section -->
+                    <div id="admin-resources" class="admin-section" style="display: none;">
+                        <div class="section-header">
+                            <div>
+                                <h2><i class="bi bi-folder me-2"></i>Resources</h2>
+                                <p class="text-muted mb-0">Manage wellness resources for users</p>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary me-2" onclick="showResourceForm()">
+                                    <i class="bi bi-plus-circle me-1"></i>Add Resource
+                                </button>
+                                <button class="btn btn-outline-light" onclick="loadResources()">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Add New Resource</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="resource-form" style="display: none;" class="mb-4">
+                                    <form id="new-resource-form">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control mb-2" id="resource-title" placeholder="Title" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select class="form-select mb-2" id="resource-type" required>
+                                                    <option value="link">Link</option>
+                                                    <option value="pdf">PDF</option>
+                                                    <option value="video">Video</option>
+                                                    <option value="article">Article</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <textarea class="form-control mb-2" id="resource-description" placeholder="Description" rows="2"></textarea>
+                                        <input type="text" class="form-control mb-2" id="resource-url" placeholder="URL or Path" required>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="resource-active" checked>
+                                            <label class="form-check-label">Active</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-admin-primary me-2">Save</button>
+                                        <button type="button" class="btn btn-secondary" onclick="hideResourceForm()">Cancel</button>
+                                    </form>
+                                </div>
+                                        <div id="resources-list">
+                                    <p class="text-center py-4"><span class="text-muted" style="font-size: 1.1rem; font-weight: 500;">Loading resources...</span></p>
+                                </div>
+                                <div class="alert alert-info mt-3">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    <strong>Resource Types:</strong> You can add PDFs, articles, videos, or links. Users can access these in the "Wellness Resources" section of the main app.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Section -->
+                    <div id="admin-settings" class="admin-section" style="display: none;">
+                        <h2 class="mb-4"><i class="bi bi-gear me-2"></i>Settings</h2>
+                        <div class="card bg-admin-card">
+                            <div class="card-body">
+                                <form id="settings-form">
+                                    <div class="mb-3">
+                                        <label class="form-label">Quick Mode Default</label>
+                                        <select class="form-select" id="setting-quick-mode">
+                                            <option value="true">True</option>
+                                            <option value="false">False</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Max Samples (Quick Text)</label>
+                                        <input type="number" class="form-control" id="setting-max-samples-text" min="1000" max="10000">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Max Samples (Quick Image)</label>
+                                        <input type="number" class="form-control" id="setting-max-samples-image" min="1000" max="10000">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">High Risk Threshold</label>
+                                        <input type="number" class="form-control" id="setting-high-risk-threshold" min="0" max="100">
+                                    </div>
+                                    <button type="submit" class="btn btn-admin-primary">Save Settings</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logs Section -->
+                    <div id="admin-logs" class="admin-section" style="display: none;">
+                        <h2 class="mb-4"><i class="bi bi-journal-text me-2"></i>Audit Logs</h2>
+                        <div class="card bg-admin-card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th>Admin</th>
+                                                <th>Action</th>
+                                                <th>Details</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="logs-table-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Analysis Detail Modal -->
+    <div class="modal fade" id="analysisModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">Analysis Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="analysis-detail-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Admin JS -->
+    <script src="assets/js/admin.js?v=2.0"></script>
+    <script>
+        // Debug: Log when admin.js loads
+        console.log('Admin dashboard loaded. Features available:', {
+            emotionChart: !!document.getElementById('emotionChart'),
+            loginChart: !!document.getElementById('loginChart'),
+            broadcastForm: !!document.getElementById('broadcast-form'),
+            modelVersionInfo: !!document.getElementById('model-version-info'),
+            resourcesList: !!document.getElementById('resources-list'),
+            logsTable: !!document.getElementById('logs-table-body')
+        });
+    </script>
+</body>
+</html>
+

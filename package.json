@@ -1,0 +1,29 @@
+{
+  "name": "mindscope-ai",
+  "version": "1.0.0",
+  "description": "Multimodal Mental Health Analysis Web Application",
+  "scripts": {
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && python -m venv venv && venv/Scripts/activate && pip install -r requirements.txt && python datasets/dataset_manager.py && uvicorn empath_app:app --reload --host 0.0.0.0 --port 8000",
+    "frontend": "cd frontend && npm install && npm run dev",
+    "install-all": "npm run install-backend && npm run install-frontend",
+    "install-backend": "cd backend && pip install -r requirements.txt",
+    "install-frontend": "cd frontend && npm install",
+    "train-models": "cd backend && python train_models.py --model all",
+    "dev": "npm run start",
+    "build": "cd frontend && npm run build",
+    "preview": "cd frontend && npm run preview"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "mental-health",
+    "ai",
+    "multimodal",
+    "emotion-analysis",
+    "stress-detection"
+  ],
+  "author": "MindScope AI Team",
+  "license": "MIT"
+}

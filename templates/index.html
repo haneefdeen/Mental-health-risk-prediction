@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindScope AI - Enhanced Mental Health Analysis</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#" onclick="showSection('dashboard')">
+                <i class="bi bi-brain me-2"></i>MindScope AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item user-only">
+                        <a class="nav-link" href="#" onclick="showSection('dashboard')">
+                            <i class="bi bi-house me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item user-only">
+                        <a class="nav-link" href="#" onclick="showSection('analyze')">
+                            <i class="bi bi-search me-1"></i>Analyze
+                        </a>
+                    </li>
+                    <li class="nav-item user-only">
+                        <a class="nav-link" href="#" onclick="showSection('timeline')">
+                            <i class="bi bi-graph-up me-1"></i>Timeline
+                        </a>
+                    </li>
+                    <li class="nav-item user-only">
+                        <a class="nav-link" href="#" onclick="showSection('reports')">
+                            <i class="bi bi-file-earmark-text me-1"></i>Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('messages')">
+                            <i class="bi bi-inbox me-1"></i>Messages
+                        </a>
+                    </li>
+                    <li class="nav-item user-only">
+                        <a class="nav-link" href="#" onclick="showSection('resources')">
+                            <i class="bi bi-folder me-1"></i>Wellness Resources
+                        </a>
+                    </li>
+                    <!-- Admin-only navigation -->
+                    <li class="nav-item admin-only" style="display: none;">
+                        <a class="nav-link" href="/admin" target="_self">
+                            <i class="bi bi-shield-check me-1"></i>Admin Dashboard
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-outline-light me-2" onclick="toggleTheme()">
+                        <i class="bi bi-sun" id="theme-icon"></i>
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i><span id="user-name">Guest</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="bi bi-box-arrow-right me-1"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-5 pt-4">
+        <!-- Login Modal -->
+        <div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="bi bi-shield-lock me-2"></i>Login to MindScope AI
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" required>
+                            </div>
+                            <div class="alert alert-info">
+                                <strong>Demo Credentials:</strong><br>
+                                <small>Admin: admin / admin123<br>User: user1 / user123</small>
+                            </div>
+                        </form>
+                    <div class="text-center mt-3">
+                        <small>New here? <a href="#" onclick="showSignupModal()">Create an account</a></small>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="login()">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Modal -->
+        <div class="modal fade" id="signupModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="bi bi-person-plus me-2"></i>Create a MindScope Account
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <form id="signupForm">
+                            <div class="mb-3">
+                                <label for="signupName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="signupName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="signupEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="signupEmail" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="signupUsername" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="signupUsername" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="signupPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="signupPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Role</label>
+                                <select class="form-select" id="signupRole" required>
+                                    <option value="user" selected>User</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" onclick="signup()">
+                            <i class="bi bi-person-check me-1"></i>Create Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">
+                        <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                        <span class="badge bg-success ms-2" id="user-role-badge">User</span>
+                    </h2>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-gradient-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Total Analyses</h6>
+                                    <h3 id="total-analyses">0</h3>
+                                </div>
+                                <i class="bi bi-graph-up fs-1 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-gradient-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Current Mood</h6>
+                                    <h3 id="current-mood">😊</h3>
+                                </div>
+                                <i class="bi bi-emoji-smile fs-1 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-gradient-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Stress Level</h6>
+                                    <h3 id="stress-level">Low</h3>
+                                </div>
+                                <i class="bi bi-activity fs-1 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-gradient-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Risk Level</h6>
+                                    <h3 id="risk-level">Low</h3>
+                                </div>
+                                <i class="bi bi-shield-check fs-1 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-pie-chart me-2"></i>Emotion Distribution
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="emotionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-bar-chart me-2"></i>Stress Trends
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="stressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin-only Dashboard -->
+            <div id="admin-dashboard" class="admin-only" style="display: none;">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="mb-4">
+                            <i class="bi bi-shield-check me-2"></i>Admin Analytics
+                        </h3>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6 class="card-title">High Risk Cases</h6>
+                                        <h3 id="high-risk-cases">0</h3>
+                                    </div>
+                                    <i class="bi bi-exclamation-triangle fs-1 opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6 class="card-title">Crisis Cases</h6>
+                                        <h3 id="crisis-cases">0</h3>
+                                    </div>
+                                    <i class="bi bi-exclamation-circle fs-1 opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6 class="card-title">Total Users</h6>
+                                        <h3 id="total-users">2</h3>
+                                    </div>
+                                    <i class="bi bi-people fs-1 opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-graph-up me-2"></i>System Analytics
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="adminChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-list-ul me-2"></i>Recent High-Risk Cases
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="high-risk-list">
+                                    <p class="text-muted">No high-risk cases detected</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analyze Section (User Only) -->
+        <div id="analyze" class="section user-only" style="display: none;">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">
+                        <i class="bi bi-search me-2"></i>Analyze Mental Health
+                    </h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Text Analysis -->
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-chat-text me-2"></i>Text Analysis
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="textAnalysisForm">
+                                <div class="mb-3">
+                                    <label for="textInput" class="form-label">Enter your thoughts or feelings:</label>
+                                    <textarea class="form-control" id="textInput" rows="4" 
+                                        placeholder="How are you feeling today? Share your thoughts..."></textarea>
+                                </div>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-search me-1"></i>Analyze Text
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="resetTextAnalysis()">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Analysis -->
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-camera me-2"></i>Image Analysis
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="imageAnalysisForm">
+                                <div class="mb-3">
+                                    <label for="imageInput" class="form-label">Upload an image:</label>
+                                    <input type="file" class="form-control" id="imageInput" accept="image/*">
+                                </div>
+                                <div id="imagePreview" class="mb-3" style="display: none;">
+                                    <img id="previewImg" class="img-thumbnail" style="max-width: 200px;">
+                                    <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeImage()">
+                                        <i class="bi bi-trash me-1"></i>Remove
+                                    </button>
+                                </div>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <button type="submit" class="btn btn-primary" id="analyzeImageBtn" disabled>
+                                        <i class="bi bi-search me-1"></i>Analyze Image
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="resetImageAnalysis()">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <div class="row mt-3">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-camera-video me-2"></i>Webcam Live Emotion Scan
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-center mb-3 mb-md-0">
+                                <video id="webcamVideo" class="rounded border w-100" autoplay playsinline muted></video>
+                                <canvas id="webcamCanvas" class="d-none"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="text-muted">Grant webcam permission to analyze live facial expressions directly in the browser.</p>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <button type="button" class="btn btn-outline-primary" onclick="startWebcam()">
+                                        <i class="bi bi-play-circle me-1"></i>Start Webcam
+                                    </button>
+                                    <button type="button" class="btn btn-primary" onclick="captureWebcam()">
+                                        <i class="bi bi-collection-play me-1"></i>Capture & Analyze
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger" onclick="stopWebcam()">
+                                        <i class="bi bi-stop-circle me-1"></i>Stop
+                                    </button>
+                                </div>
+                                <small class="text-muted d-block mt-2">Live analysis runs locally and never stores camera feeds.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- Analysis Results -->
+            <div id="analysisResults" class="row" style="display: none;">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-clipboard-data me-2"></i>Analysis Results
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- 1. PRIMARY EMOTION -->
+                            <div class="row mb-4">
+                                <div class="col-md-4 text-center">
+                                    <h6 class="text-muted mb-2">PRIMARY EMOTION</h6>
+                                    <div class="d-flex align-items-center justify-content-center my-2">
+                                        <span id="primary-emotion-emoji" class="display-4 me-2">😊</span>
+                                        <span id="primary-emotion-label" class="h3 fw-bold">Happy</span>
+                                    </div>
+                                    <p class="text-muted small" id="primary-emotion-description">Your emotional tone appears positive and calm.</p>
+                                </div>
+                                
+                                <!-- 2. STRESS CATEGORY -->
+                                <div class="col-md-4 text-center">
+                                    <h6 class="text-muted mb-2">STRESS CATEGORY</h6>
+                                    <h3 id="stress-category-label" class="fw-bold text-success my-2">No Apparent Stress</h3>
+                                    <p class="text-muted small" id="stress-category-description">Minimal indicators of emotional strain.</p>
+                                </div>
+                                
+                                <!-- 3. OVERALL RISK SCORE -->
+                                <div class="col-md-4 text-center">
+                                    <h6 class="text-muted mb-2">OVERALL RISK SCORE</h6>
+                                    <h3 id="overall-risk-score-text" class="fw-bold text-success my-2">0% (Low Risk)</h3>
+                                    <div class="progress mt-2" style="height: 25px;">
+                                        <div id="overall-risk-score-bar" class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 4. KEY INDICATORS & 5. AI COPING SUGGESTIONS -->
+                            <div class="row mt-4">
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="bi bi-key me-2"></i>Key Indicators</h6>
+                                            <ul class="list-unstyled small mt-3">
+                                                <li class="mb-2">Mood tone: <strong id="indicator-mood">Stable</strong></li>
+                                                <li class="mb-2">Cognitive clues: <strong id="indicator-cognitive">Positive thinking</strong></li>
+                                                <li>Social cues: <strong id="indicator-social">Connected & active</strong></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="bi bi-lightbulb me-2"></i>AI Coping Suggestions</h6>
+                                            <ul id="suggestions-list" class="list-group list-group-flush small mt-3">
+                                                <!-- Suggestions will be populated here -->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 6. AI WELLNESS TIP -->
+                            <div class="alert alert-info mt-4 border-start border-5 border-info" id="aiTipContainer">
+                                <h6><i class="bi bi-heart-pulse me-2"></i>AI Wellness Tip</h6>
+                                <p class="mb-0" id="aiTipText">Personalized recommendations will appear here after your next analysis.</p>
+                            </div>
+
+                            <!-- Optional Notes -->
+                            <div class="alert alert-secondary mt-3 small">
+                                <i class="bi bi-info-circle me-2"></i>This is not a medical diagnosis. If symptoms persist, seek professional help.
+                            </div>
+
+                            <!-- 7. WHY THIS RESULT? (TEXT) -->
+                            <div class="mt-4">
+                                <h6><i class="bi bi-highlighter me-2"></i>Why this result? (Text)</h6>
+                                <div id="text-explanation" class="border rounded p-2 small">
+                                    <p id="text-explanation-summary" class="text-muted mb-2">
+                                        Word-level importance will appear here when you analyze text.
+                                    </p>
+                                    <div id="text-explanation-tokens" class="mt-2 d-flex flex-wrap gap-1"></div>
+                                    <p class="text-muted mt-2 mb-0"><small>Tone: <span id="text-tone">N/A</span></small></p>
+                                </div>
+                            </div>
+
+                            <!-- 8. WHY THIS RESULT? (IMAGE) -->
+                            <div class="mt-4">
+                                <h6><i class="bi bi-image-alt me-2"></i>Why this result? (Image)</h6>
+                                <div class="d-flex flex-wrap align-items-center gap-3">
+                                    <div>
+                                        <small class="text-muted d-block">Captured / uploaded image:</small>
+                                        <img id="original-image-preview" class="img-thumbnail" style="max-width: 160px; display: none;" alt="Original image preview">
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block">Grad-CAM overlay:</small>
+                                        <img id="image-heatmap" class="img-thumbnail" style="max-width: 160px; display: none; opacity: 0.9;" alt="Image explanation heatmap">
+                                    </div>
+                                </div>
+                                <p id="image-explanation-text" class="text-muted small mt-2">No image was analyzed for this prediction.</p>
+                            </div>
+
+                            <div class="mt-4 text-end">
+                                <button type="button" class="btn btn-outline-secondary" onclick="clearResults()">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i>Reset Results
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Section (User Only) -->
+        <div id="timeline" class="section user-only" style="display: none;">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">
+                        <i class="bi bi-graph-up me-2"></i>Emotional Timeline
+                    </h2>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-clock-history me-2"></i>Your Emotional Journey
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="timelineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Behavioral Analytics -->
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-emoji-smile me-2"></i>Emoji Usage Patterns
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="emojiChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-activity me-2"></i>Posting Frequency
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="frequencyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-fingerprint me-2"></i>Behavioral Fingerprint
+                            </h5>
+                        </div>
+                        <div class="card-body" id="behavioralFingerprint">
+                            <p class="text-muted mb-0">Start an analysis to see your emoji usage and mood patterns.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-activity me-2"></i>Frequency Insights
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-2">Posting frequency score</p>
+                            <div class="progress mb-3" style="height: 20px;">
+                                <div class="progress-bar bg-info" id="frequencyProgress" style="width: 0%;"></div>
+                            </div>
+                            <p class="mb-0 text-muted">Average sessions per week: <span id="frequencyScore">0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Section (User Only) -->
+        <div id="reports" class="section user-only" style="display: none;">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">
+                        <i class="bi bi-file-earmark-text me-2"></i>Reports & Export
+                    </h2>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-file-earmark-pdf me-2"></i>Download PDF Report
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Generate a polished PDF containing your latest insights, coping strategies, and behavioral trends.</p>
+                            <button class="btn btn-danger w-100" onclick="downloadPdfReport()">
+                                <i class="bi bi-download me-2"></i>Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-archive me-2"></i>Export Data ZIP
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Export every analysis, mood check-in, and behavioral fingerprint as a secure ZIP archive.</p>
+                            <button class="btn btn-success w-100" onclick="exportDataZip()">
+                                <i class="bi bi-box-arrow-down me-2"></i>Download ZIP
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                                <button class="btn btn-outline-danger" onclick="deleteMyData()">
+                                    <i class="bi bi-trash me-2"></i>Delete My Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Preview -->
+            <div id="reportPreview" class="row" style="display: none;">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-eye me-2"></i>Report Preview
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="reportContent">
+                                <!-- Report content will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wellness Resources Section (User Only) -->
+        <div id="resources" class="section user-only" style="display: none;">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">
+                        <i class="bi bi-folder me-2"></i>Wellness Resources
+                    </h2>
+                    <p class="text-muted mb-4">Access helpful wellness resources including articles, videos, PDFs, and links curated by our team.</p>
+                </div>
+            </div>
+            
+            <div class="row" id="resources-list">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="text-muted mt-3">Loading wellness resources...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Panel Section -->
+        <div id="admin" class="section admin-only" style="display: none;">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">
+                        <i class="bi bi-shield-check me-2"></i>Admin Panel
+                    </h2>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-people me-2"></i>User Management
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="userList">
+                                <!-- User list will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-8 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-graph-up me-2"></i>System Analytics
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="systemChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-exclamation-triangle me-2"></i>High-Risk Monitoring
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="riskMonitoring">
+                                <!-- Risk monitoring will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-envelope-heart me-2"></i>Send Message
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="supportForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Select User (or leave empty for broadcast)</label>
+                                    <select class="form-select" id="supportUserSelect">
+                                        <option value="">-- Broadcast to All Users --</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="messageTitle" placeholder="Message title">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Message</label>
+                                    <textarea class="form-control" id="supportMessage" rows="3" placeholder="Encouraging message, resources, or next steps..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-send me-1"></i>Send Message
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-bar-chart-line me-2"></i>Model Performance Metrics
+                            </h5>
+                        </div>
+                        <div class="card-body" id="model-metrics-card-body">
+                            <p class="text-muted">No evaluation metrics found. Run `backend/evaluate_models.py` first.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages Section (User & Admin) -->
+        <div id="messages" class="section" style="display: none;">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">
+                        <i class="bi bi-inbox me-2"></i>Messages
+                    </h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-envelope me-2"></i>Your Messages
+                            </h5>
+                        </div>
+                        <div class="card-body" id="messagesList">
+                            <p class="text-muted">Loading messages...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/app_enhanced.js"></script>
+</body>
+</html>

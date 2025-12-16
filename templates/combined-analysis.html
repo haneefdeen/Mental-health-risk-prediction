@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combined Analysis - MindScope AI</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body data-theme="dark">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-brain me-2"></i>MindScope AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="bi bi-house me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-search me-1"></i>Analyze
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="text-analysis.html">
+                                <i class="bi bi-chat-text me-2"></i>Text Analysis
+                            </a></li>
+                            <li><a class="dropdown-item" href="image-analysis.html">
+                                <i class="bi bi-image me-2"></i>Image Analysis
+                            </a></li>
+                            <li><a class="dropdown-item active" href="combined-analysis.html">
+                                <i class="bi bi-layers me-2"></i>Combined Analysis
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mood-timeline.html">
+                            <i class="bi bi-graph-up me-1"></i>Mood Timeline
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reports.html">
+                            <i class="bi bi-file-earmark-text me-1"></i>Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">
+                            <i class="bi bi-person me-1"></i>Profile
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm" id="themeToggle" onclick="toggleTheme()">
+                            <i class="bi bi-sun" id="themeIcon"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item dropdown" id="userDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i><span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">
+                                <i class="bi bi-person me-2"></i>Profile
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container py-4">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="gradient-text mb-3">
+                        <i class="bi bi-layers me-2"></i>Combined Analysis
+                    </h2>
+                    <p class="text-muted">Use both text and image for enhanced emotion detection with multi-modal fusion</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header bg-gradient-warning text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-layers me-2"></i>Multi-Modal Input
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label for="combinedText" class="form-label">
+                                            <i class="bi bi-pencil me-1"></i>Text Input:
+                                        </label>
+                                        <textarea class="form-control" id="combinedText" rows="6" 
+                                                  placeholder="How are you feeling? Share your thoughts..."></textarea>
+                                        <div class="form-text">Describe your current emotional state</div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="combinedImage" class="form-label">
+                                            <i class="bi bi-upload me-1"></i>Image Upload:
+                                        </label>
+                                        <input type="file" class="form-control" id="combinedImage" accept="image/*">
+                                        <div class="form-text">Upload a photo showing your current mood</div>
+                                    </div>
+                                    <div class="d-flex gap-3">
+                                        <button class="btn btn-warning btn-lg" onclick="analyzeCombined()">
+                                            <i class="bi bi-layers me-2"></i>Analyze Combined
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-lg" onclick="resetCombinedAnalysis()">
+                                            <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="combinedPreview" class="text-center">
+                                        <i class="bi bi-layers display-1 text-muted"></i>
+                                        <p class="text-muted">Upload both text and image</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header bg-gradient-info text-white">
+                            <h6 class="mb-0">
+                                <i class="bi bi-info-circle me-2"></i>Fusion Process
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Text Analysis</div>
+                                        DistilBERT processes your text
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Image Analysis</div>
+                                        ResNet18 analyzes facial emotions
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Fusion</div>
+                                        Weighted combination for enhanced accuracy
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Results</div>
+                                        Comprehensive emotional insights
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-gradient-success text-white">
+                            <h6 class="mb-0">
+                                <i class="bi bi-lightbulb me-2"></i>Benefits
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Higher accuracy than single mode</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Consistency validation</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Comprehensive insights</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Better stress detection</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="combinedResults" class="result-card mt-4" style="display: none;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 id="combinedEmotion">Happy</h4>
+                        <p class="mb-3">Combined Emotion</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Combined Score: <span id="combinedScore">88%</span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" style="width: 88%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>Text Confidence: <span id="combinedTextConfidence">85%</span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Image Confidence: <span id="combinedImageConfidence">92%</span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" style="width: 92%"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Consistency: <span class="badge bg-success">High</span></h6>
+                        <p class="small text-muted">Both modes agree</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6>Enhanced AI Suggestion:</h6>
+                    <p id="combinedSuggestion">Both your text and facial expression indicate happiness. This consistency suggests genuine positive emotions. Consider maintaining this mood through social interaction or creative activities.</p>
+                </div>
+            </div>
+
+            <!-- Fusion Visualization -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-gradient-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-diagram-3 me-2"></i>Fusion Visualization
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-4">
+                                    <div class="fusion-step">
+                                        <i class="bi bi-chat-text display-4 text-primary mb-3"></i>
+                                        <h6>Text Analysis</h6>
+                                        <p class="text-muted">DistilBERT</p>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-primary" style="width: 85%">85%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="fusion-step">
+                                        <i class="bi bi-plus-circle display-4 text-warning mb-3"></i>
+                                        <h6>Fusion</h6>
+                                        <p class="text-muted">Weighted Average</p>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-warning" style="width: 88%">88%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="fusion-step">
+                                        <i class="bi bi-image display-4 text-success mb-3"></i>
+                                        <h6>Image Analysis</h6>
+                                        <p class="text-muted">ResNet18</p>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-success" style="width: 92%">92%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis History -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-gradient-warning text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-clock-history me-2"></i>Recent Combined Analyses
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Text Preview</th>
+                                            <th>Image</th>
+                                            <th>Emotion</th>
+                                            <th>Combined Score</th>
+                                            <th>Consistency</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Today</td>
+                                            <td>"I am feeling great..."</td>
+                                            <td><i class="bi bi-image text-primary"></i> smile.jpg</td>
+                                            <td><span class="emotion-badge">😊 Happy</span></td>
+                                            <td>88%</td>
+                                            <td><span class="badge bg-success">High</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Yesterday</td>
+                                            <td>"Work has been stressful..."</td>
+                                            <td><i class="bi bi-image text-primary"></i> neutral.png</td>
+                                            <td><span class="emotion-badge">😟 Stressed</span></td>
+                                            <td>75%</td>
+                                            <td><span class="badge bg-warning">Medium</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2 days ago</td>
+                                            <td>"I love spending time..."</td>
+                                            <td><i class="bi bi-image text-primary"></i> happy.gif</td>
+                                            <td><span class="emotion-badge">😊 Happy</span></td>
+                                            <td>95%</td>
+                                            <td><span class="badge bg-success">High</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/combined-analysis.js"></script>
+</body>
+</html>

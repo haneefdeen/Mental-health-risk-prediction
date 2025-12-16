@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Logs - MindScope AI</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body data-theme="dark">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-brain me-2"></i>MindScope AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="bi bi-house me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="bi bi-speedometer2 me-1"></i>User Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-dashboard.html">
+                            <i class="bi bi-shield-check me-1"></i>Admin Panel
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-users.html">
+                            <i class="bi bi-people me-1"></i>User Management
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-alerts.html">
+                            <i class="bi bi-exclamation-triangle me-1"></i>Alerts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="admin-logs.html">
+                            <i class="bi bi-journal-text me-1"></i>Audit Logs
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm" id="themeToggle" onclick="toggleTheme()">
+                            <i class="bi bi-sun" id="themeIcon"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item dropdown" id="userDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-shield-check me-1"></i><span id="userName">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">
+                                <i class="bi bi-person me-2"></i>Profile
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container py-4">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="gradient-text mb-3">
+                        <i class="bi bi-journal-text me-2"></i>Audit Logs
+                    </h2>
+                    <p class="text-muted">Complete audit trail of all admin actions and system events</p>
+                </div>
+            </div>
+
+            <!-- Log Statistics -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card admin-stat-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-journal-text display-4 text-primary mb-3"></i>
+                            <h3>1,247</h3>
+                            <p class="mb-0">Total Logs</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card admin-stat-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-person-check display-4 text-success mb-3"></i>
+                            <h3>856</h3>
+                            <p class="mb-0">Admin Actions</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card admin-stat-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-gear display-4 text-warning mb-3"></i>
+                            <h3>234</h3>
+                            <p class="mb-0">System Events</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card admin-stat-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-shield-exclamation display-4 text-danger mb-3"></i>
+                            <h3>157</h3>
+                            <p class="mb-0">Security Events</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log Filters -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <h6 class="mb-0">Filter Logs</h6>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <select class="form-select" id="logTypeFilter">
+                                                <option value="all">All Types</option>
+                                                <option value="admin_action">Admin Actions</option>
+                                                <option value="system_event">System Events</option>
+                                                <option value="security_event">Security Events</option>
+                                                <option value="user_action">User Actions</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-select" id="logSeverityFilter">
+                                                <option value="all">All Severities</option>
+                                                <option value="high">High</option>
+                                                <option value="medium">Medium</option>
+                                                <option value="low">Low</option>
+                                                <option value="info">Info</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="btn btn-primary" onclick="filterLogs()">
+                                                <i class="bi bi-funnel me-1"></i>Filter
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audit Logs Table -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-gradient-info text-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-table me-2"></i>Audit Logs
+                                </h5>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-light btn-sm" onclick="exportLogs()">
+                                        <i class="bi bi-download me-1"></i>Export
+                                    </button>
+                                    <button class="btn btn-light btn-sm" onclick="refreshLogs()">
+                                        <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="auditLogsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Timestamp</th>
+                                            <th>Action Type</th>
+                                            <th>Admin</th>
+                                            <th>Description</th>
+                                            <th>Severity</th>
+                                            <th>IP Address</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>2024-01-15 14:30:25</td>
+                                            <td><span class="badge bg-primary">send_message</span></td>
+                                            <td>admin</td>
+                                            <td>Sent support message to user jane_smith</td>
+                                            <td><span class="badge bg-info">Info</span></td>
+                                            <td>192.168.1.100</td>
+                                            <td><span class="badge bg-success">Success</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024-01-15 14:25:10</td>
+                                            <td><span class="badge bg-warning">view_user</span></td>
+                                            <td>admin</td>
+                                            <td>Viewed user details for john_doe</td>
+                                            <td><span class="badge bg-info">Info</span></td>
+                                            <td>192.168.1.100</td>
+                                            <td><span class="badge bg-success">Success</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024-01-15 14:20:45</td>
+                                            <td><span class="badge bg-danger">handle_alert</span></td>
+                                            <td>admin</td>
+                                            <td>Handled high stress alert for user mike_wilson</td>
+                                            <td><span class="badge bg-warning">Medium</span></td>
+                                            <td>192.168.1.100</td>
+                                            <td><span class="badge bg-success">Success</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024-01-15 14:15:30</td>
+                                            <td><span class="badge bg-success">export_data</span></td>
+                                            <td>admin</td>
+                                            <td>Exported user analytics report</td>
+                                            <td><span class="badge bg-info">Info</span></td>
+                                            <td>192.168.1.100</td>
+                                            <td><span class="badge bg-success">Success</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024-01-15 14:10:15</td>
+                                            <td><span class="badge bg-secondary">system_action</span></td>
+                                            <td>system</td>
+                                            <td>Automatic high stress detection for user sarah_jones</td>
+                                            <td><span class="badge bg-danger">High</span></td>
+                                            <td>127.0.0.1</td>
+                                            <td><span class="badge bg-success">Success</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024-01-15 14:05:00</td>
+                                            <td><span class="badge bg-primary">user_action</span></td>
+                                            <td>john_doe</td>
+                                            <td>User performed text analysis</td>
+                                            <td><span class="badge bg-info">Info</span></td>
+                                            <td>192.168.1.101</td>
+                                            <td><span class="badge bg-success">Success</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024-01-15 14:00:30</td>
+                                            <td><span class="badge bg-warning">login_attempt</span></td>
+                                            <td>admin</td>
+                                            <td>Admin login successful</td>
+                                            <td><span class="badge bg-info">Info</span></td>
+                                            <td>192.168.1.100</td>
+                                            <td><span class="badge bg-success">Success</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024-01-15 13:55:45</td>
+                                            <td><span class="badge bg-danger">security_event</span></td>
+                                            <td>unknown</td>
+                                            <td>Failed login attempt from IP 203.0.113.1</td>
+                                            <td><span class="badge bg-danger">High</span></td>
+                                            <td>203.0.113.1</td>
+                                            <td><span class="badge bg-danger">Failed</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log Details -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-gradient-warning text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-info-circle me-2"></i>Log Details
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Action Types</h6>
+                                    <div class="action-types">
+                                        <div class="action-type mb-2">
+                                            <span class="badge bg-primary me-2">send_message</span>
+                                            <span class="text-muted">Sending support messages to users</span>
+                                        </div>
+                                        <div class="action-type mb-2">
+                                            <span class="badge bg-warning me-2">view_user</span>
+                                            <span class="text-muted">Viewing user details and history</span>
+                                        </div>
+                                        <div class="action-type mb-2">
+                                            <span class="badge bg-danger me-2">handle_alert</span>
+                                            <span class="text-muted">Handling system alerts and interventions</span>
+                                        </div>
+                                        <div class="action-type mb-2">
+                                            <span class="badge bg-success me-2">export_data</span>
+                                            <span class="text-muted">Exporting reports and analytics</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Severity Levels</h6>
+                                    <div class="severity-levels">
+                                        <div class="severity-level mb-2">
+                                            <span class="badge bg-danger me-2">High</span>
+                                            <span class="text-muted">Critical security events and system failures</span>
+                                        </div>
+                                        <div class="severity-level mb-2">
+                                            <span class="badge bg-warning me-2">Medium</span>
+                                            <span class="text-muted">Important admin actions and alerts</span>
+                                        </div>
+                                        <div class="severity-level mb-2">
+                                            <span class="badge bg-info me-2">Low</span>
+                                            <span class="text-muted">Routine admin actions and user activities</span>
+                                        </div>
+                                        <div class="severity-level mb-2">
+                                            <span class="badge bg-secondary me-2">Info</span>
+                                            <span class="text-muted">General information and system events</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log Export -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-gradient-success text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-download me-2"></i>Export Options
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="export-option text-center">
+                                        <i class="bi bi-file-earmark-text display-4 text-primary mb-3"></i>
+                                        <h6>JSON Export</h6>
+                                        <p class="text-muted">Export logs in JSON format for analysis</p>
+                                        <button class="btn btn-primary" onclick="exportLogsJSON()">
+                                            <i class="bi bi-download me-2"></i>Export JSON
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="export-option text-center">
+                                        <i class="bi bi-file-earmark-csv display-4 text-success mb-3"></i>
+                                        <h6>CSV Export</h6>
+                                        <p class="text-muted">Export logs in CSV format for spreadsheets</p>
+                                        <button class="btn btn-success" onclick="exportLogsCSV()">
+                                            <i class="bi bi-download me-2"></i>Export CSV
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="export-option text-center">
+                                        <i class="bi bi-file-earmark-pdf display-4 text-danger mb-3"></i>
+                                        <h6>PDF Report</h6>
+                                        <p class="text-muted">Generate comprehensive audit report</p>
+                                        <button class="btn btn-danger" onclick="exportLogsPDF()">
+                                            <i class="bi bi-download me-2"></i>Export PDF
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/admin-logs.js"></script>
+</body>
+</html>
+

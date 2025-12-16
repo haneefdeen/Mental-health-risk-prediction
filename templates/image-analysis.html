@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Analysis - MindScope AI</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body data-theme="dark">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-brain me-2"></i>MindScope AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="bi bi-house me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-search me-1"></i>Analyze
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="text-analysis.html">
+                                <i class="bi bi-chat-text me-2"></i>Text Analysis
+                            </a></li>
+                            <li><a class="dropdown-item active" href="image-analysis.html">
+                                <i class="bi bi-image me-2"></i>Image Analysis
+                            </a></li>
+                            <li><a class="dropdown-item" href="combined-analysis.html">
+                                <i class="bi bi-layers me-2"></i>Combined Analysis
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mood-timeline.html">
+                            <i class="bi bi-graph-up me-1"></i>Mood Timeline
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reports.html">
+                            <i class="bi bi-file-earmark-text me-1"></i>Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">
+                            <i class="bi bi-person me-1"></i>Profile
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm" id="themeToggle" onclick="toggleTheme()">
+                            <i class="bi bi-sun" id="themeIcon"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item dropdown" id="userDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i><span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">
+                                <i class="bi bi-person me-2"></i>Profile
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container py-4">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="gradient-text mb-3">
+                        <i class="bi bi-image me-2"></i>Image Emotion Analysis
+                    </h2>
+                    <p class="text-muted">Upload an image or use your webcam for emotion detection using ResNet18 model</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header bg-gradient-success text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-upload me-2"></i>Image Upload & Analysis
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label for="imageInput" class="form-label">
+                                            <i class="bi bi-upload me-1"></i>Upload Image:
+                                        </label>
+                                        <input type="file" class="form-control" id="imageInput" accept="image/*">
+                                        <div class="form-text">Supported formats: JPG, PNG, GIF</div>
+                                    </div>
+                                    <div class="d-flex gap-3 mb-4">
+                                        <button class="btn btn-success btn-lg" onclick="analyzeImage()">
+                                            <i class="bi bi-search me-2"></i>Analyze Image
+                                        </button>
+                                        <button class="btn btn-info btn-lg" onclick="startWebcam()">
+                                            <i class="bi bi-camera me-2"></i>Use Webcam
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-lg" onclick="resetImageAnalysis()">
+                                            <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="webcam-container">
+                                        <video id="webcamVideo" style="display: none; width: 100%; border-radius: 12px;"></video>
+                                        <canvas id="webcamCanvas" style="display: none;"></canvas>
+                                        <div id="imagePreview" class="text-center">
+                                            <i class="bi bi-image display-1 text-muted"></i>
+                                            <p class="text-muted">No image selected</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header bg-gradient-info text-white">
+                            <h6 class="mb-0">
+                                <i class="bi bi-info-circle me-2"></i>How it Works
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Image Processing</div>
+                                        Image is preprocessed and normalized
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">AI Analysis</div>
+                                        ResNet18 model detects facial emotions
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Results</div>
+                                        Emotion, confidence, and suggestions provided
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-gradient-warning text-white">
+                            <h6 class="mb-0">
+                                <i class="bi bi-lightbulb me-2"></i>Tips
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Use clear, well-lit images</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Face should be clearly visible</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Avoid heavily filtered photos</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Try different angles for best results</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="imageResults" class="result-card mt-4" style="display: none;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 id="imageEmotion">Happy</h4>
+                        <p class="mb-3">Detected Emotion</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Confidence: <span id="imageConfidence">92%</span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" style="width: 92%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Stress Level: <span id="imageStress">Low</span></h6>
+                        <div class="stress-indicator">
+                            <div class="stress-bar stress-low" style="width: 20%;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Analysis Type: <span class="badge bg-success">ResNet18</span></h6>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6>AI Suggestion:</h6>
+                    <p id="imageSuggestion">Your facial expression shows happiness! This positive emotion is great for your overall well-being.</p>
+                </div>
+            </div>
+
+            <!-- Webcam Controls -->
+            <div id="webcamControls" class="card mt-4" style="display: none;">
+                <div class="card-header bg-gradient-info text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-camera me-2"></i>Webcam Controls
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="webcam-container">
+                                <video id="webcamVideoMain" style="width: 100%; border-radius: 12px;"></video>
+                                <div id="emotionOverlay" class="emotion-overlay" style="display: none;">
+                                    Detected: Happy 😊
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-success" onclick="captureWebcamImage()">
+                                    <i class="bi bi-camera-fill me-2"></i>Capture Image
+                                </button>
+                                <button class="btn btn-danger" onclick="stopWebcam()">
+                                    <i class="bi bi-stop-fill me-2"></i>Stop Webcam
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis History -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-gradient-warning text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-clock-history me-2"></i>Recent Image Analyses
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Image</th>
+                                            <th>Emotion</th>
+                                            <th>Confidence</th>
+                                            <th>Stress</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Today</td>
+                                            <td><i class="bi bi-image text-primary"></i> smile.jpg</td>
+                                            <td><span class="emotion-badge">😊 Happy</span></td>
+                                            <td>92%</td>
+                                            <td><span class="badge bg-success">Low</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Yesterday</td>
+                                            <td><i class="bi bi-image text-primary"></i> neutral.png</td>
+                                            <td><span class="emotion-badge">😐 Neutral</span></td>
+                                            <td>78%</td>
+                                            <td><span class="badge bg-warning">Medium</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2 days ago</td>
+                                            <td><i class="bi bi-image text-primary"></i> happy.gif</td>
+                                            <td><span class="emotion-badge">😊 Happy</span></td>
+                                            <td>88%</td>
+                                            <td><span class="badge bg-success">Low</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/image-analysis.js"></script>
+</body>
+</html>

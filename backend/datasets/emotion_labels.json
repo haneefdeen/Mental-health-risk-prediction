@@ -1,0 +1,35 @@
+{
+  "emotions": [
+    "joy",
+    "sadness",
+    "anger",
+    "fear",
+    "surprise",
+    "disgust",
+    "neutral"
+  ],
+  "stress_levels": [
+    "low",
+    "moderate",
+    "high",
+    "critical"
+  ],
+  "anxiety_indicators": [
+    "worry",
+    "panic",
+    "restlessness",
+    "irritability",
+    "fatigue",
+    "concentration_problems"
+  ],
+  "coping_strategies": [
+    "deep_breathing",
+    "meditation",
+    "exercise",
+    "social_support",
+    "professional_help",
+    "mindfulness",
+    "journaling",
+    "sleep_hygiene"
+  ]
+}

@@ -1,0 +1,102 @@
+[
+  {
+    "text": "I'm feeling really overwhelmed with work lately. Can't seem to catch a break.",
+    "emotion": "stress",
+    "anxiety_level": 0.8
+  },
+  {
+    "text": "Had a great day today! Everything went perfectly and I'm so happy.",
+    "emotion": "joy",
+    "anxiety_level": 0.1
+  },
+  {
+    "text": "I don't know what to do anymore. Everything feels hopeless and pointless.",
+    "emotion": "depression",
+    "anxiety_level": 0.9
+  },
+  {
+    "text": "Just finished my presentation and it went well! Feeling confident.",
+    "emotion": "confidence",
+    "anxiety_level": 0.2
+  },
+  {
+    "text": "Can't sleep again. My mind keeps racing with worries about tomorrow.",
+    "emotion": "anxiety",
+    "anxiety_level": 0.7
+  },
+  {
+    "text": "Spent time with friends today. It was nice to laugh and forget about stress.",
+    "emotion": "relief",
+    "anxiety_level": 0.3
+  },
+  {
+    "text": "I'm so tired of pretending everything is okay when it's not.",
+    "emotion": "exhaustion",
+    "anxiety_level": 0.6
+  },
+  {
+    "text": "Finally got the promotion I've been working towards! So excited!",
+    "emotion": "excitement",
+    "anxiety_level": 0.1
+  },
+  {
+    "text": "Why does everyone else seem to have it figured out except me?",
+    "emotion": "insecurity",
+    "anxiety_level": 0.7
+  },
+  {
+    "text": "Taking a walk in nature always helps me feel better.",
+    "emotion": "calm",
+    "anxiety_level": 0.2
+  },
+  {
+    "text": "I feel like I'm drowning in responsibilities and expectations.",
+    "emotion": "overwhelmed",
+    "anxiety_level": 0.8
+  },
+  {
+    "text": "Had a good therapy session today. Feeling more hopeful about the future.",
+    "emotion": "hope",
+    "anxiety_level": 0.3
+  },
+  {
+    "text": "Another sleepless night. My anxiety is getting worse.",
+    "emotion": "anxiety",
+    "anxiety_level": 0.8
+  },
+  {
+    "text": "Celebrated my birthday with family. Feeling loved and grateful.",
+    "emotion": "gratitude",
+    "anxiety_level": 0.1
+  },
+  {
+    "text": "I can't stop worrying about what others think of me.",
+    "emotion": "anxiety",
+    "anxiety_level": 0.6
+  },
+  {
+    "text": "Meditation helped me find some peace today.",
+    "emotion": "peace",
+    "anxiety_level": 0.2
+  },
+  {
+    "text": "Feeling isolated and alone. No one understands what I'm going through.",
+    "emotion": "loneliness",
+    "anxiety_level": 0.7
+  },
+  {
+    "text": "Completed a challenging project at work. Proud of my accomplishment!",
+    "emotion": "pride",
+    "anxiety_level": 0.2
+  },
+  {
+    "text": "My heart is racing and I can't breathe properly. Having a panic attack.",
+    "emotion": "panic",
+    "anxiety_level": 0.9
+  },
+  {
+    "text": "Spent quality time with my pet. They always make me feel better.",
+    "emotion": "comfort",
+    "anxiety_level": 0.2
+  }
+]

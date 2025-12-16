@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - MindScope AI</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body data-theme="dark">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-brain me-2"></i>MindScope AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="bi bi-house me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-search me-1"></i>Analyze
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="text-analysis.html">
+                                <i class="bi bi-chat-text me-2"></i>Text Analysis
+                            </a></li>
+                            <li><a class="dropdown-item" href="image-analysis.html">
+                                <i class="bi bi-image me-2"></i>Image Analysis
+                            </a></li>
+                            <li><a class="dropdown-item" href="combined-analysis.html">
+                                <i class="bi bi-layers me-2"></i>Combined Analysis
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mood-timeline.html">
+                            <i class="bi bi-graph-up me-1"></i>Mood Timeline
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="reports.html">
+                            <i class="bi bi-file-earmark-text me-1"></i>Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">
+                            <i class="bi bi-person me-1"></i>Profile
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm" id="themeToggle" onclick="toggleTheme()">
+                            <i class="bi bi-sun" id="themeIcon"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item dropdown" id="userDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i><span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">
+                                <i class="bi bi-person me-2"></i>Profile
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container py-4">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="gradient-text mb-3">
+                        <i class="bi bi-file-earmark-text me-2"></i>Reports & Analytics
+                    </h2>
+                    <p class="text-muted">Generate comprehensive reports and export your data</p>
+                </div>
+            </div>
+
+            <!-- Report Generation -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-gradient-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-file-earmark-plus me-2"></i>Generate Report
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Report Type</h6>
+                                    <div class="mb-3">
+                                        <select class="form-select" id="reportType">
+                                            <option value="comprehensive">Comprehensive Analysis Report</option>
+                                            <option value="monthly">Monthly Summary</option>
+                                            <option value="stress">Stress Analysis Report</option>
+                                            <option value="emotion">Emotion Trend Report</option>
+                                        </select>
+                                    </div>
+                                    <h6>Date Range</h6>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <input type="date" class="form-control" id="startDate">
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="date" class="form-control" id="endDate">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Include Data</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="includeText" checked>
+                                        <label class="form-check-label" for="includeText">
+                                            Text Analysis Results
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="includeImage" checked>
+                                        <label class="form-check-label" for="includeImage">
+                                            Image Analysis Results
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="includeCombined" checked>
+                                        <label class="form-check-label" for="includeCombined">
+                                            Combined Analysis Results
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="includeCharts" checked>
+                                        <label class="form-check-label" for="includeCharts">
+                                            Charts and Visualizations
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <button class="btn btn-primary btn-lg" onclick="generateReport()">
+                                    <i class="bi bi-file-earmark-pdf me-2"></i>Generate PDF Report
+                                </button>
+                                <button class="btn btn-success btn-lg ms-2" onclick="exportData()">
+                                    <i class="bi bi-file-earmark-zip me-2"></i>Export Data (ZIP)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Preview -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-gradient-info text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-eye me-2"></i>Report Preview
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Summary Statistics</h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Total Analyses</td>
+                                                    <td><strong>24</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Text Analyses</td>
+                                                    <td><strong>12</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Image Analyses</td>
+                                                    <td><strong>8</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Combined Analyses</td>
+                                                    <td><strong>4</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average Confidence</td>
+                                                    <td><strong>85%</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average Stress Level</td>
+                                                    <td><strong>42%</strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Emotion Distribution</h6>
+                                    <div class="chart-container" style="height: 200px;">
+                                        <canvas id="reportEmotionChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Reports -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-gradient-warning text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-clock-history me-2"></i>Recent Reports
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Report Name</th>
+                                            <th>Type</th>
+                                            <th>Date Range</th>
+                                            <th>Generated</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Comprehensive Analysis Report</td>
+                                            <td><span class="badge bg-primary">PDF</span></td>
+                                            <td>Jan 1 - Jan 31, 2024</td>
+                                            <td>2 hours ago</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-download"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Stress Analysis Report</td>
+                                            <td><span class="badge bg-success">ZIP</span></td>
+                                            <td>Dec 1 - Dec 31, 2023</td>
+                                            <td>1 day ago</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-download"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Monthly Summary</td>
+                                            <td><span class="badge bg-primary">PDF</span></td>
+                                            <td>Nov 1 - Nov 30, 2023</td>
+                                            <td>1 week ago</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-download"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Export Options -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-gradient-success text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-download me-2"></i>Data Export Options
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="export-option text-center">
+                                        <i class="bi bi-file-earmark-pdf display-4 text-danger mb-3"></i>
+                                        <h6>PDF Report</h6>
+                                        <p class="text-muted">Comprehensive analysis report with charts</p>
+                                        <button class="btn btn-danger" onclick="downloadPDF()">
+                                            <i class="bi bi-download me-2"></i>Download PDF
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="export-option text-center">
+                                        <i class="bi bi-file-earmark-zip display-4 text-info mb-3"></i>
+                                        <h6>ZIP Archive</h6>
+                                        <p class="text-muted">All your data in JSON format</p>
+                                        <button class="btn btn-info" onclick="downloadZIP()">
+                                            <i class="bi bi-download me-2"></i>Download ZIP
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="export-option text-center">
+                                        <i class="bi bi-file-earmark-csv display-4 text-success mb-3"></i>
+                                        <h6>CSV Data</h6>
+                                        <p class="text-muted">Analysis data in spreadsheet format</p>
+                                        <button class="btn btn-success" onclick="downloadCSV()">
+                                            <i class="bi bi-download me-2"></i>Download CSV
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/reports.js"></script>
+</body>
+</html>
+

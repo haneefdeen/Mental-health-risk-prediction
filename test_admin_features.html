@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Features Test</title>
+</head>
+<body>
+    <h1>Admin Features Verification</h1>
+    <h2>Backend Endpoints Test</h2>
+    <button onclick="testEndpoints()">Test All Endpoints</button>
+    <div id="results"></div>
+    
+    <script>
+        async function testEndpoints() {
+            const endpoints = [
+                '/api/admin/emotion-stats',
+                '/api/admin/login-stats',
+                '/api/admin/model-versions',
+                '/api/admin/resources',
+                '/api/admin/logs'
+            ];
+            
+            const results = document.getElementById('results');
+            results.innerHTML = '<h3>Testing endpoints...</h3>';
+            
+            for (const endpoint of endpoints) {
+                try {
+                    const res = await fetch(endpoint);
+                    const data = await res.json();
+                    results.innerHTML += `<p>✅ ${endpoint}: ${res.status} - ${JSON.stringify(data).substring(0, 100)}...</p>`;
+                } catch (e) {
+                    results.innerHTML += `<p>❌ ${endpoint}: ${e.message}</p>`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
+
