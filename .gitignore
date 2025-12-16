@@ -1,0 +1,9 @@
+venv/
+backend/models/
+models/
+*.pth
+*.zip
+*.safetensors
+*.dll
+*.lib
+*.pyd
